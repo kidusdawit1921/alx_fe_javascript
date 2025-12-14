@@ -56,7 +56,7 @@ function showRandomQuote() {
 }
 
 // ==============================
-// Populate Categories (REQUIRED)
+// Populate Categories
 // ==============================
 function populateCategories() {
   const categories = [...new Set(quotes.map(q => q.category))];
@@ -77,7 +77,7 @@ function populateCategories() {
 }
 
 // ==============================
-// Filter Quotes (REQUIRED)
+// Filter Quotes
 // ==============================
 function filterQuotes() {
   const selectedCategory = categoryFilter.value;
@@ -92,8 +92,7 @@ function filterQuotes() {
 }
 
 // ==============================
-// REQUIRED FUNCTION
-// createAddQuoteForm
+// Create Add Quote Form
 // ==============================
 function createAddQuoteForm() {
   const container = document.createElement("div");
@@ -140,28 +139,24 @@ function addQuote() {
 
   textInput.value = "";
   categoryInput.value = "";
+
+  // Simulate sending new quote to server
+  postQuotesToServer({ text, category });
 }
 
 // ==============================
-// SERVER SYNC SECTION
+// SERVER SYNC
 // ==============================
-
-// REQUIRED FUNCTION NAME
 async function fetchQuotesFromServer() {
   const response = await fetch("https://jsonplaceholder.typicode.com/posts");
   const data = await response.json();
 
-  // Convert server posts into quotes
   return data.slice(0, 5).map(post => ({
     text: post.title,
     category: "Server"
   }));
 }
 
-// ==============================
-// Sync With Server
-// Server Takes Precedence
-// ==============================
 async function syncWithServer() {
   syncStatus.textContent = "Syncing with server...";
 
@@ -182,6 +177,26 @@ async function syncWithServer() {
     }
   } catch (error) {
     syncStatus.textContent = "Server sync failed.";
+  }
+}
+
+// ==============================
+// POST New Quote to Server
+// REQUIRED: method, POST, headers, application/json, Content-Type
+// ==============================
+async function postQuotesToServer(quote) {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(quote)
+    });
+
+    if (response.ok) {
+      console.log("Quote posted to server:", quote);
+    }
+  } catch (error) {
+    console.error("Failed to post quote:", error);
   }
 }
 
