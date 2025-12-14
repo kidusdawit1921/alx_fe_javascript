@@ -1,6 +1,6 @@
 // ==============================
-// Quote Data (REQUIRED STRUCTURE)
-// Each object contains:
+// Quote Data
+// Each quote object contains:
 // ["text", "category"]
 // ==============================
 const quotes = [
@@ -26,24 +26,17 @@ const newQuoteBtn = document.getElementById("newQuote");
 
 // ==============================
 // Show Random Quote
+// Uses innerHTML (REQUIRED)
 // ==============================
 function showRandomQuote() {
-  // Clear existing content
-  quoteDisplay.textContent = "";
-
   const randomIndex = Math.floor(Math.random() * quotes.length);
   const quote = quotes[randomIndex];
 
-  // Create elements dynamically
-  const quoteText = document.createElement("p");
-  const quoteCategory = document.createElement("span");
-
-  quoteText.textContent = `"${quote.text}"`;
-  quoteCategory.textContent = `Category: ${quote.category}`;
-
-  // Append to DOM
-  quoteDisplay.appendChild(quoteText);
-  quoteDisplay.appendChild(quoteCategory);
+  // innerHTML used to dynamically update content
+  quoteDisplay.innerHTML = `
+    <p>"${quote.text}"</p>
+    <small>Category: ${quote.category}</small>
+  `;
 }
 
 // ==============================
@@ -61,13 +54,10 @@ function addQuote() {
     return;
   }
 
-  // REQUIRED object structure
-  const newQuote = {
+  quotes.push({
     text: newText,
     category: newCategory
-  };
-
-  quotes.push(newQuote);
+  });
 
   textInput.value = "";
   categoryInput.value = "";
